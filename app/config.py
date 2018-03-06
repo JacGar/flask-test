@@ -1,11 +1,19 @@
+import os.path
+
 class Config(object):
     """
     Common configurations
     """
 
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///app.db'
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(BASE_DIR, 'app.db')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///'+db_path
     FLASK_CONFIG = "development"
     FLASK_APP = "run.py"
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = b"powerful secretkey"
+    WTF_CSRF_SECRET_KEY = b'a csrf secret key'
+
 
 class DevelopmentConfig(Config):
     """

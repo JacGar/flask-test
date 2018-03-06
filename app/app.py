@@ -2,7 +2,6 @@ from flask import Flask, redirect, url_for, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-
 db = SQLAlchemy(app)
 
 @app.route('/')
