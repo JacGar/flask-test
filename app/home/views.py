@@ -1,5 +1,5 @@
-from flask import render_template
-from flask_login import login_required
+from flask import abort, render_template
+from flask_login import current_user, login_required
 
 from . import home
 
@@ -19,6 +19,8 @@ def dashboard():
     return render_template('home/dashboard.html', title="Dashboard")
 
 # add admin dashboard view
+
+
 @home.route('/admin/dashboard')
 @login_required
 def admin_dashboard():
