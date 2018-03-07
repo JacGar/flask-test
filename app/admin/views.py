@@ -4,7 +4,8 @@ from flask_login import current_user, login_required
 from . import admin
 from .forms import EmployeeAssignForm, DepartmentForm, RoleForm
 from .. import db
-from ..models import Employee, Department, Role
+from ..models import User, Department, Role
+
 
 def check_admin():
     """
@@ -13,9 +14,8 @@ def check_admin():
     if not current_user.is_admin:
         abort(403)
 
+
 # Department Views
-
-
 @admin.route('/departments', methods=['GET', 'POST'])
 @login_required
 def list_departments():
@@ -205,7 +205,7 @@ def list_employees():
     """
     check_admin()
 
-    employees = Employee.query.all()
+    employees = User.query.all()
     return render_template('admin/employees/employees.html',
                            employees=employees, title='Employees')
 
@@ -217,7 +217,7 @@ def assign_employee(id):
     """
     check_admin()
 
-    employee = Employee.query.get_or_404(id)
+    employee = User.query.get_or_404(id)
 
     # prevent admin from being assigned a department or role
     if employee.is_admin:

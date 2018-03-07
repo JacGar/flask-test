@@ -3,14 +3,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db, login_manager
 
-class Employee(UserMixin, db.Model):
+class User(UserMixin, db.Model):
     """
     Create an Employee table
     """
 
     # Ensures table will be named in plural and not in singular
     # as is the name of the model
-    __tablename__ = 'employees'
+    __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(60), index=True, unique=True)
@@ -25,7 +25,7 @@ class Employee(UserMixin, db.Model):
     @property
     def password(self):
         """
-        Prevent pasword from being accessed
+        Prevent password from being accessed
         """
         raise AttributeError('password is not a readable attribute.')
 
@@ -48,7 +48,7 @@ class Employee(UserMixin, db.Model):
 # Set up user_loader
 @login_manager.user_loader
 def load_user(user_id):
-    return Employee.query.get(int(user_id))
+    return User.query.get(int(user_id))
 
 class Department(db.Model):
     """
@@ -60,7 +60,7 @@ class Department(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60), unique=True)
     description = db.Column(db.String(200))
-    employees = db.relationship('Employee', backref='department',
+    employees = db.relationship('User', backref='department',
                                 lazy='dynamic')
 
     def __repr__(self):
@@ -76,8 +76,25 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60), unique=True)
     description = db.Column(db.String(200))
-    employees = db.relationship('Employee', backref='role',
+    employees = db.relationship('User', backref='role',
                                 lazy='dynamic')
 
     def __repr__(self):
         return '<Role: {}>'.format(self.name)
+
+
+class Task(db.Model):
+    """
+    To Do list table
+    """
+
+    __tablename__= 'tasks'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(60))
+    description = db.Column(db.String(200))
+    creation_time = db.Column(db.DateTime)
+    start_time = db.Column(db.DateTime, default=None)
+    end_time = db.Column(db.DateTime, default=None)
+    is_finished = db.Column(db.Boolean, default=False)
+    is_in_progress = db.Column(db.Boolean, default=False)

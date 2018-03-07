@@ -4,7 +4,7 @@ from flask_login import login_required, login_user, logout_user
 from . import auth
 from .forms import LoginForm, RegistrationForm
 from .. import db
-from ..models import Employee
+from ..models import User
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
@@ -14,7 +14,7 @@ def register():
     """
     form = RegistrationForm()
     if form.validate_on_submit():
-        employee = Employee(email=form.email.data,
+        employee = User(email=form.email.data,
                             username=form.username.data,
                             first_name=form.first_name.data,
                             last_name=form.last_name.data,
@@ -42,7 +42,7 @@ def login():
 
         # check whether employee exists in the database and whether
         # the password entered matches the password in the database
-        employee = Employee.query.filter_by(email=form.email.data).first()
+        employee = User.query.filter_by(email=form.email.data).first()
         if employee is not None and employee.verify_password(
                 form.password.data):
             # log employee in
